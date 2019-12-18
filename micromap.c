@@ -1,3 +1,15 @@
+/* 
+ * https://github.com/kavorite/micromap
+ *
+ * Sometimes, you just want a hashmap. This is the simplest dictionary
+ * implementation that I'm aware could have been conceived. It uses an
+ * open-addressing scheme with linear probing, and returns an error on
+ * insertions or reallocations when the load factor exceeds 70%. It's designed
+ * to be easily audited, easily reused, and easily read. Use as you wish. Or
+ * write a better one. No skin off my back.
+ *
+ */
+
 #include "micromap.h"
 #define FNV_OFFSET_BASIS (0xcbf29ce484222325)
 #define FNV_PRIME (0x100000001b3)
@@ -35,14 +47,12 @@ tbStatus tbGrow(ledger* old, size_t ncap) {
     if ((float)(ncap) < 0.7*(float)(pcap)) {
         return TB_STAT_OVERLOAD;
     }
-    ledger new = {.cells = NULL, .len = 0, .cap = 0};
+    ledger new = {.cells = NULL, .len = 0, .cap = ncap};
     new.cells = malloc(sizeof(tbcell)*ncap);
     if (new.cells == NULL) {
         return TB_STAT_OMEM;
     }
     memset(new.cells, 0, sizeof(tbcell)*ncap);
-    new.len = old->len;
-    new.cap = ncap;
     for (int i = 0; i < pcap; i++) {
         if (old->cells[i].ptr != NULL) {
             tbSet(&new, old->cells[i].key, old->cells[i].ptr);

@@ -1,3 +1,15 @@
+/* 
+ * https://github.com/kavorite/micromap
+ *
+ * Sometimes, you just want a hashmap. This is the simplest dictionary
+ * implementation that I'm aware could have been conceived. It uses an
+ * open-addressing scheme with linear probing, and returns an error on
+ * insertions or reallocations when the load factor exceeds 70%. It's designed
+ * to be easily audited, easily reused, and easily read. Use as you wish. Or
+ * write a better one. No skin off my back.
+ *
+ */
+
 #ifndef H_MICROMAP_LEDGER
 #define H_MICROMAP_LEDGER
 #include <stdint.h>
@@ -28,7 +40,7 @@ typedef struct {
 void        tbFree(ledger* map);
 tbStatus    tbGrow(ledger* map, size_t cap);
 tbStatus    tbSet(ledger* map, const char* key, const void* ptr);
-void        tbDel(ledger* map, const char* key);
 const void* tbGet(const ledger* map, const char* key);
+void        tbDel(ledger* map, const char* key);
 
 #endif
