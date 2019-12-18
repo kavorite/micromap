@@ -42,12 +42,11 @@ const char* tbStrError(tbStatus stat) {
 
 char* strdup(const char* src) {
     int n = strlen(src);
-    char* dst = malloc(n*sizeof(*dst));
+    char* dst = malloc((n+1)*sizeof(*dst));
     if (dst == NULL) {
         return NULL;
     }
-    strcpy(dst, src);
-    return dst;
+    return strcpy(dst, src);
 }
 
 tbStatus tbGrow(ledger* old, size_t ncap) {
