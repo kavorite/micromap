@@ -1,6 +1,5 @@
 /* 
  * https://github.com/kavorite/micromap
- *
  * Sometimes, you just want a hashmap. This is the simplest dictionary
  * implementation that I'm aware could have been conceived. It uses an
  * open-addressing scheme with linear probing, and returns an error on
@@ -15,7 +14,6 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <string.h>
 
 size_t ledgerHash(int n, const char* s);
 
@@ -37,10 +35,13 @@ typedef struct {
     size_t  len, cap;
 } ledger;
 
+typedef void (*ledgerRangeCallback)(const char* key, void* ptr);
+
 void        tbFree(ledger* map);
 tbStatus    tbGrow(ledger* map, size_t cap);
 tbStatus    tbSet(ledger* map, const char* key, const void* ptr);
 const void* tbGet(const ledger* map, const char* key);
 void        tbDel(ledger* map, const char* key);
+void        tbRange(const ledger* map, ledgerRangeCallback forEach);
 
 #endif
