@@ -5,9 +5,6 @@
 #include <stdio.h>
 #include "micromap.h"
 
-void printPair(const char* key, void* ptr) {
-}
-
 int main(void) {
     ledger dict = { .cells = NULL, .len = 0, .cap = 0};
     tbGrow(&dict, 32);
