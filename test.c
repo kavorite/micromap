@@ -5,6 +5,9 @@
 #include <stdio.h>
 #include "micromap.h"
 
+void printPair(const char* key, void* ptr) {
+}
+
 int main(void) {
     ledger dict = { .cells = NULL, .len = 0, .cap = 0};
     tbGrow(&dict, 32);
@@ -33,12 +36,19 @@ int main(void) {
         fprintf(stderr, "fatal: length does not match\n");
         return -3;
     }
-    // print key/value pairs
+    // range over the table, printing stored key/value pairs
+    for (int i = 0; i < dict.cap; i++) {
+        tbcell cell = dict.cells[i];
+        if (cell.key == NULL) {
+            continue;
+        }
+        printf("%s = %d\n", cell.key, *(int*)(cell.ptr));
+    }
+
+    // check that cells are actually populated with our assigned values
     for (int i = 0; i < dict.len; i++) {
-        const int* val = tbGet(&dict, keys[i]);
-        printf("%s = %d\n", keys[i], *val);
         if (vals+i != tbGet(&dict, keys[i])) {
-            fprintf(stderr, "fatal: reference inequality on element %d\n", i+1);
+            fprintf(stderr, "reference inequality on element %d (%s)\n", i+1, keys[i]);
             return -3;
         }
     }
