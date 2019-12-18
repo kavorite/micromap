@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 
 size_t ledgerHash(int n, const char* s);
 
@@ -15,18 +16,19 @@ typedef enum {
 const char* tbStrError(tbStatus);
 
 typedef struct {
-    char* key;
+    char*       key;
     const void* ptr;
 } tbcell;
 
 typedef struct {
     tbcell* cells;
-    size_t len, cap;
+    size_t  len, cap;
 } ledger;
 
-void tbFree(ledger* map);
-tbStatus tbGrow(ledger* map, size_t cap);
-tbStatus tbSet(ledger* map, const char* key, const void* ptr);
-void tbDel(ledger* map, const char* key);
+void        tbFree(ledger* map);
+tbStatus    tbGrow(ledger* map, size_t cap);
+tbStatus    tbSet(ledger* map, const char* key, const void* ptr);
+void        tbDel(ledger* map, const char* key);
 const void* tbGet(const ledger* map, const char* key);
+
 #endif
