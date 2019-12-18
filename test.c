@@ -22,10 +22,13 @@ int main(int argc, char** argv) {
             return -1;
         }
     }
+    // try doing a brain transplant
+    tbGrow(&dict, 64);
     if (dict.len != 22) {
         fprintf(stderr, "fatal: length does not match\n");
         return -2;
     }
+    // print key/value pairs
     for (int i = 0; i < dict.len; i++) {
         const int* val = tbGet(&dict, keys[i]);
         printf("%s = %d\n", keys[i], *val);
