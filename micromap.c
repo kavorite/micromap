@@ -11,9 +11,10 @@
  */
 
 #include "micromap.h"
+#include <string.h>
+
 #define FNV_OFFSET_BASIS (0xcbf29ce484222325)
 #define FNV_PRIME (0x100000001b3)
-
 // fnv1a
 size_t ledgerHash(int n, const char* s) {
     size_t x = FNV_OFFSET_BASIS;
@@ -39,6 +40,16 @@ const char* tbStrError(tbStatus stat) {
             return NULL;
     }
             
+}
+
+char* strdup(const char* src) {
+    int n = strlen(src);
+    char* dst = malloc(n*sizeof(*dst));
+    if (dst == NULL) {
+        return NULL;
+    }
+    strcpy(dst, src);
+    return dst;
 }
 
 tbStatus tbGrow(ledger* old, size_t ncap) {
@@ -108,7 +119,9 @@ tbStatus tbSet(ledger* map, const char* key, const void* ptr) {
     }
     tbFreeCell(map, i);
     map->cells[i].ptr = ptr;
-    map->cells[i].key = strdup(key);
+    if ((map->cells[i].key = strdup(key)) == NULL) {
+        return TB_STAT_OMEM;
+    }
     return TB_STAT_OK;
 }
 
