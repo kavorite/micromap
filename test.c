@@ -33,6 +33,14 @@ int main(void) {
         fprintf(stderr, "fatal: length does not match\n");
         return -3;
     }
+    // check that cells are actually populated with our assigned values
+    for (int i = 0; i < dict.len; i++) {
+        if (vals+i != tbGet(&dict, keys[i])) {
+            fprintf(stderr, "reference inequality on element %d (%s)\n", i+1, keys[i]);
+            return -3;
+        }
+    }
+
     // range over the table, printing stored key/value pairs
     for (int i = 0; i < dict.cap; i++) {
         tbcell cell = dict.cells[i];
@@ -40,14 +48,6 @@ int main(void) {
             continue;
         }
         printf("%s = %d\n", cell.key, *(int*)(cell.ptr));
-    }
-
-    // check that cells are actually populated with our assigned values
-    for (int i = 0; i < dict.len; i++) {
-        if (vals+i != tbGet(&dict, keys[i])) {
-            fprintf(stderr, "reference inequality on element %d (%s)\n", i+1, keys[i]);
-            return -3;
-        }
     }
     tbFree(&dict);
     printf("OK\n");
