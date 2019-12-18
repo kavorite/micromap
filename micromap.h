@@ -40,7 +40,7 @@ typedef struct {
 void        tbFree(ledger* map);
 tbStatus    tbGrow(ledger* map, size_t cap);
 tbStatus    tbSet(ledger* map, const char* key, const void* ptr);
-const void* tbGet(const ledger* map, const char* key);
+void*       tbGet(const ledger* map, const char* key);
 void        tbDel(ledger* map, const char* key);
 
 #endif

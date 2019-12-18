@@ -123,6 +123,6 @@ tbStatus tbSet(ledger* map, const char* key, const void* ptr) {
     return TB_STAT_OK;
 }
 
-const void* tbGet(const ledger* map, const char* key) {
-    return map->cells[probe(map, key)].ptr;
+void* tbGet(const ledger* map, const char* key) {
+    return (void*)(map->cells[probe(map, key)].ptr);
 }
