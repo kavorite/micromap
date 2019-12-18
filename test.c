@@ -6,6 +6,7 @@
 #include "micromap.h"
 
 void printPair(const char* key, void* ptr) {
+    printf("%s = %d\n", key, *(int*)(ptr));
 }
 
 int main(void) {
@@ -37,13 +38,7 @@ int main(void) {
         return -3;
     }
     // range over the table, printing stored key/value pairs
-    for (int i = 0; i < dict.cap; i++) {
-        tbcell cell = dict.cells[i];
-        if (cell.key == NULL) {
-            continue;
-        }
-        printf("%s = %d\n", cell.key, *(int*)(cell.ptr));
-    }
+    tbRange(&dict, printPair);
 
     // check that cells are actually populated with our assigned values
     for (int i = 0; i < dict.len; i++) {
