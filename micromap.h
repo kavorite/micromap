@@ -1,10 +1,10 @@
-#ifndef H_LEDGER
-#define H_LEDGER
+#ifndef H_MICROMAP_LEDGER
+#define H_MICROMAP_LEDGER
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdbool.h>
 
-unsigned long long ledgerHash(int n, const char* s);
+size_t ledgerHash(int n, const char* s);
 
 typedef enum {
     TB_STAT_OK,
@@ -12,9 +12,11 @@ typedef enum {
     TB_STAT_OVERLOAD,
 } tbStatus;
 
+const char* tbStrError(tbStatus);
+
 typedef struct {
     char* key;
-    void* ptr;
+    const void* ptr;
 } tbcell;
 
 typedef struct {
@@ -24,10 +26,7 @@ typedef struct {
 
 void tbFree(ledger* map);
 tbStatus tbGrow(ledger* map, size_t cap);
-tbStatus tbSet(ledger* map, char* key, void* ptr);
-void tbDel(ledger* map, char* key);
-void* tbGet(ledger* map, char* key);
-
-const char* tbStrError(tbStatus);
-
+tbStatus tbSet(ledger* map, const char* key, const void* ptr);
+void tbDel(ledger* map, const char* key);
+const void* tbGet(const ledger* map, const char* key);
 #endif
