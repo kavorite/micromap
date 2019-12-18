@@ -18,12 +18,10 @@
 // fnv1a
 size_t ledgerHash(int n, const char* s) {
     size_t x = FNV_OFFSET_BASIS;
-    for (int i = 0; i < n || n < 0; i++) {
+    for (int i = 0; (s[i] != '\0' &&
+                     (i < n || n < 0)); i++) {
         x ^= s[i];
         x *= FNV_PRIME;
-        if (s[i] == '\0') {
-            break;
-        }
     }
     return x;
 }
