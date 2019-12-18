@@ -28,11 +28,12 @@ int main(void) {
         fprintf(stderr, "fatal: failed ledger rehash/reallocation: %s\n", tbStrError(stat));
         return -2;
     }
-    printf("load factor post-growth: %f\n", (float)(dict.len) / (float)(dict.cap));
     if (dict.len != 22) {
         fprintf(stderr, "fatal: length does not match\n");
         return -3;
     }
+    printf("load factor post-growth: %f\n", (float)(dict.len) / (float)(dict.cap));
+
     // check that cells are actually populated with our assigned values
     for (int i = 0; i < dict.len; i++) {
         if (vals+i != tbGet(&dict, keys[i])) {
