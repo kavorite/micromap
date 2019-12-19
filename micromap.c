@@ -40,7 +40,7 @@ const char* tbStrError(tbStatus stat) {
             
 }
 
-char* strdup(const char* src) {
+static char* _mstrdup(const char* src) {
     int n = strlen(src);
     char* dst = malloc((n+1)*sizeof(*dst));
     if (dst == NULL) {
@@ -71,16 +71,10 @@ tbStatus tbGrow(ledger* old, size_t ncap) {
     return TB_STAT_OK;
 }
 
-ledger mkLedger(size_t cap, tbStatus* stat) {
-    ledger new = (ledger){.cells = NULL, .len = 0, .cap = 0};
-    tbStatus lcstat = tbGrow(&new, cap);
-    if (lcstat != TB_STAT_OK) {
-        memset(&new, 0, sizeof(new));
-    }
-    if (stat != NULL) {
-        *stat = lcstat;
-    }
-    return new;
+tbStatus tbInit(ledger* map, size_t cap) {
+    *map = (ledger){.cells = NULL, .cap = 0, .len = 0};
+    tbStatus stat = tbGrow(map, cap);
+    return stat;
 }
 
 size_t tbProbe(const ledger* map, const char* key) {
@@ -125,7 +119,7 @@ tbStatus tbSet(ledger* map, const char* key, const void* ptr) {
     }
     tbFreeCell(map, i);
     map->cells[i].ptr = ptr;
-    if ((map->cells[i].key = strdup(key)) == NULL) {
+    if ((map->cells[i].key = _mstrdup(key)) == NULL) {
         return TB_STAT_OMEM;
     }
     return TB_STAT_OK;

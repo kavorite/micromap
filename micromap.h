@@ -36,7 +36,7 @@ typedef struct {
     size_t  len, cap;
 } ledger;
 
-ledger   mkLedger(size_t cap, tbStatus* stat);
+tbStatus tbInit(ledger* map, size_t cap);
 void     tbFree(ledger* map);
 tbStatus tbGrow(ledger* map, size_t ncap);
 tbStatus tbSet(ledger* map, const char* key, const void* ptr);
