@@ -91,12 +91,12 @@ void tbFreeCell(ledger* map, size_t i) {
     if (map->cells[i].key != NULL) {
         free(map->cells[i].key);
     }
+    map->cells[i] = (tbcell){NULL, NULL};
 }
 
 void tbDel(ledger* map, const char* key) {
     size_t i = tbProbe(map, key);
     tbFreeCell(map, i);
-    map->cells[i] = (tbcell){NULL, NULL};
 }
 
 void tbFree(ledger* map) {
@@ -104,6 +104,7 @@ void tbFree(ledger* map) {
         tbFreeCell(map, i);
     }
     free(map->cells);
+    *map = (ledger){.cells = NULL, .cap = 0, .len = 0};
 }
 
 tbStatus tbSet(ledger* map, const char* key, const void* ptr) {
