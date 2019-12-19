@@ -62,7 +62,7 @@ tbStatus tbGrow(ledger* old, size_t ncap) {
     }
     memset(new.cells, 0, sizeof(tbcell)*ncap);
     for (int i = 0; i < pcap; i++) {
-        if (old->cells[i].ptr != NULL) {
+        if (old->cells[i].key != NULL) {
             tbSet(&new, old->cells[i].key, old->cells[i].ptr);
         }
     }
@@ -87,20 +87,16 @@ size_t tbProbe(const ledger* map, const char* key) {
     // hash for slot index
     size_t i = ledgerHash(-1, key) % map->cap;
     // linear probe; find first empty cell or key match
-    while(map->cells[i].ptr != NULL) {
-        if (strcmp(map->cells[i].key, key) == 0) {
-            break;
-        }
+    while(map->cells[i].key != NULL &&
+          strcmp(key, map->cells[i].key) != 0) {
         i = (i + 1) % map->cap;
     }
     return i;
 }
 
 void tbFreeCell(ledger* map, size_t i) {
-    if (map->cells[i].ptr != NULL) {
-        map->len--;
-    }
     if (map->cells[i].key != NULL) {
+        map->len--;
         free(map->cells[i].key);
     }
     map->cells[i] = (tbcell){NULL, NULL};
@@ -124,7 +120,7 @@ tbStatus tbSet(ledger* map, const char* key, const void* ptr) {
         return TB_STAT_OVERLOAD;
     }
     size_t i = tbProbe(map, key);
-    if (map->cells[i].ptr == NULL) {
+    if (map->cells[i].key == NULL) {
         map->len++;
     }
     tbFreeCell(map, i);
