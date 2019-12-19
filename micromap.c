@@ -33,7 +33,7 @@ const char* tbStrError(tbStatus stat) {
         case TB_STAT_OMEM:
             return "out of memory";
         case TB_STAT_OVERLOAD:
-            return "operation exceeds maximum load factor; please rehash";
+            return "operation exceeds maximum load factor; please resize ledger";
         default:
             return NULL;
     }
