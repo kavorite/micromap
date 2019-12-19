@@ -107,7 +107,7 @@ void tbFree(ledger* map) {
 }
 
 tbStatus tbSet(ledger* map, const char* key, const void* ptr) {
-    if ((float)(map->len) > 0.7*(float)(map->cap)) {
+    if ((float)(map->len+1) > 0.7*(float)(map->cap)) {
         return TB_STAT_OVERLOAD;
     }
     size_t i = tbProbe(map, key);
