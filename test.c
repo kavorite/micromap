@@ -6,9 +6,9 @@
 #include "micromap.h"
 
 int main(void) {
+    ledger dict;
     tbStatus stat;
-    ledger dict = mkLedger(32, &stat);
-    if (stat != TB_STAT_OK) {
+    if ((stat = tbInit(&dict, 32)) != TB_STAT_OK) {
         fprintf(stderr, "fatal: mkLedger: %s\n", tbStrError(stat));
         return -1;
     }
