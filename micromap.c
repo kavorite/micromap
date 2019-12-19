@@ -52,7 +52,7 @@ char* strdup(const char* src) {
 tbStatus tbGrow(ledger* old, size_t ncap) {
     size_t pcap = old->cap;
     // size_t dcap = cap - old->cap;
-    if (0.7*(double)(old->len) > (double)(ncap)) {
+    if (0.7*(double)(old->len+1) > (double)(ncap)) {
         return TB_STAT_OVERLOAD;
     }
     ledger new = {.cells = NULL, .len = 0, .cap = ncap};
@@ -69,6 +69,18 @@ tbStatus tbGrow(ledger* old, size_t ncap) {
     tbFree(old);
     *old = new;
     return TB_STAT_OK;
+}
+
+ledger mkLedger(size_t cap, tbStatus* stat) {
+    ledger new = (ledger){.cells = NULL, .len = 0, .cap = 0};
+    tbStatus lcstat = tbGrow(&new, cap);
+    if (lcstat != TB_STAT_OK) {
+        memset(&new, 0, sizeof(new));
+    }
+    if (stat != NULL) {
+        *stat = lcstat;
+    }
+    return new;
 }
 
 size_t tbProbe(const ledger* map, const char* key) {
