@@ -41,5 +41,6 @@ tbStatus    tbGrow(ledger* map, size_t cap);
 tbStatus    tbSet(ledger* map, const char* key, const void* ptr);
 void*       tbGet(const ledger* map, const char* key);
 void        tbDel(ledger* map, const char* key);
+size_t      tbProbe(const ledger* map, const char* key);
 
 #endif
