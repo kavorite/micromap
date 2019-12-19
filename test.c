@@ -6,12 +6,15 @@
 #include "micromap.h"
 
 int main(void) {
-    ledger dict = { .cells = NULL, .len = 0, .cap = 0};
-    tbGrow(&dict, 32);
+    tbStatus stat;
+    ledger dict = mkLedger(32, &stat);
+    if (stat != TB_STAT_OK) {
+        fprintf(stderr, "fatal: mkLedger: %s\n", tbStrError(stat));
+        return -1;
+    }
     srand(time(0));
     char keys[22][9];
     unsigned int vals[22];
-    tbStatus stat;
     for (int i = 0; i < 22; i++) {
         unsigned int x = rand();
         // 64 bits = 8 bytes + null terminator
@@ -38,7 +41,7 @@ int main(void) {
     for (int i = 0; i < dict.len; i++) {
         if (vals+i != tbGet(&dict, keys[i])) {
             fprintf(stderr, "reference inequality on element %d (%s)\n", i+1, keys[i]);
-            return -3;
+            return -4;
         }
     }
 
