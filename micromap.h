@@ -16,20 +16,27 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-size_t ledgerHash(int n, const char* s);
+#define LEDGER_MAX_KEYLEN (64)
 
 typedef enum {
     TB_STAT_OK,
     TB_STAT_OMEM,
+    TB_STAT_KEY_TOO_LONG,
     TB_STAT_OVERLOAD,
 } tbStatus;
 
 const char* tbStrError(tbStatus);
 
+size_t ledgerHash(int n, const char* s);
+
+typedef char tbkey[LEDGER_MAX_KEYLEN];
+
 typedef struct {
-    char*       key;
+    tbkey key;
     const void* ptr;
 } tbcell;
+
+bool tbCellEmpty(const tbcell* cell);
 
 typedef struct {
     tbcell* cells;

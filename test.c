@@ -6,8 +6,8 @@
 #include "micromap.h"
 
 int main(void) {
-    tbStatus stat;
-    ledger dict = mkLedger(32, &stat);
+    ledger dict;
+    tbStatus stat = tbInit(&dict, 32);
     if (stat != TB_STAT_OK) {
         fprintf(stderr, "fatal: mkLedger: %s\n", tbStrError(stat));
         return -1;
@@ -47,11 +47,10 @@ int main(void) {
 
     // range over the table, printing stored key/value pairs
     for (int i = 0; i < dict.cap; i++) {
-        tbcell cell = dict.cells[i];
-        if (cell.key == NULL) {
+        if (!tbCellEmpty(dict.cells+i)) {
             continue;
         }
-        printf("%s = %d\n", cell.key, *(int*)(cell.ptr));
+        printf("%s = %d\n", dict.cells[i].key, *(int*)(dict.cells[i].ptr));
     }
     tbFree(&dict);
     printf("OK\n");
