@@ -48,12 +48,36 @@ int main(void) {
     // range over the table, printing stored key/value pairs
     for (int i = 0; i < dict.cap; i++) {
         tbcell cell = dict.cells[i];
-        if (cell.key == NULL) {
+        if (tbcellEmpty(&cell)) {
             continue;
         }
         printf("%s = %d\n", cell.key, *(int*)(cell.ptr));
     }
     tbFree(&dict);
+    // collision+deletion test
+    char ckeys[3][3] = {"Lp", "pt", "nj"};
+    int cvals[3] = {1, 2, 3};
+    tbInit(&dict, 32);
+    for (int i = 0; i < 3; i++) {
+        tbSet(&dict, ckeys[i], cvals+i);
+    }
+    tbDel(&dict, "pt");
+    printf("\nCollision/Deletion:\n");
+    // do another k/v range
+    for (int i = 0; i < dict.cap; i++) {
+        tbcell cell = dict.cells[i];
+        if (tbcellEmpty(&cell)) {
+            continue;
+        }
+        printf("%s = %d\n", cell.key, *(int*)(cell.ptr));
+    }
+    if (*(int*)tbGet(&dict, "Lp") != 1 ||
+        *(int*)tbGet(&dict, "nj") != 3) {
+        fprintf(stderr, "linear probe failure: value forgotten\n");
+        return -5;
+    }
+    tbFree(&dict);
+
     printf("OK\n");
     return 0;
 }

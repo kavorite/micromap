@@ -31,6 +31,8 @@ typedef struct {
     const void* ptr;
 } tbcell;
 
+bool tbcellEmpty(const tbcell* cell);
+
 typedef struct {
     tbcell* cells;
     size_t  len, cap;
