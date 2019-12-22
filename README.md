@@ -10,8 +10,9 @@ example usage, see [test.c][test.c], and feel free to copy and distribute the
 source. 
 
 Thanks to [@manuelVo][manuel] for reviewing the source, and
-suggesting the changes made in [PR#1][pr1].
+suggesting the changes made in [PR#1][pr1], and [this issue][delprobe].
 
 [test.c]: https://github.com/kavorite/micromap/blob/master/test.c
 [manuel]: https://github.com/manuelVo
 [pr1]: https://github.com/kavorite/micromap/pull/1
+[delprobe]: https://github.com/kavorite/micromap/issues/2
